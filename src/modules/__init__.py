@@ -1,1 +1,1 @@
-__all__ = ["comm_init"]
+__all__ = ["comm_init", "VoterBlockChain"]
