@@ -1,5 +1,6 @@
 from modules.comm_init import *
 from modules.VoterBlockChain import *
+import copy
 
 def main():
     MYIP = "127.0.0.1"#"192.168.0.1"
@@ -21,7 +22,7 @@ def main():
             conn.send(pickle.dumps(BlockChain.VoterChain))
         elif data[0] == 2: #two means the voter booth needs a ballot
             # change voter status to "voted"
-            temp = BlockChain.VoterChain[-1]
+            temp = BlockChain.VoterChain[-1].copy()
             BlockChain.VoterChain.append(temp)
             BlockChain.VoterChain[-1][data[1]] = 1
             print BlockChain.VoterChain
