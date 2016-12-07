@@ -48,8 +48,8 @@ def sendVote():
 
 #credCheck: This method is used to check the credentials and enable all of the voting boxes
 def credCheck():
-    #If we have proper credentials to vote enable the voter to be able to vote
-    #We will want to put a function before this to return if the credentials are good.
+    #If we have proper credentials to vote. Enable the voter to be able to vote.
+    #We will want to put a function before this to check if the credentials are good.
     if(cred_entry.get() == "Pete"):
         message_entry.configure(state=NORMAL)
         message_entry.delete(0,END)
@@ -166,7 +166,7 @@ write_box.grid(column=2, row=4, sticky=W)
 vote = ttk.Button(mainframe, text="VOTE", command = sendVote, state=DISABLED)
 vote.grid(column=4, row=5, sticky=E)
 
-#Setting variables and widgets
+#Setting variables
 labelVar.set("Presidential Nominees")
 credVar.set("Enter your Credentials:")
 
