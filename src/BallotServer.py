@@ -21,7 +21,8 @@ def main():
         if data == 3:
             BoothSock = sender_init(BoothIP, BoothPort)
             BoothSock.send(pickle.dumps(ballot))
-            vote = pickle.loads(BoothSock.recv(MAXBUFF))
+            #vote = pickle.loads(BoothSock.recv(MAXBUFF))
+            vote = BoothSock.recv(MAXBUFF)
             BoothSock.close()
             print vote
 

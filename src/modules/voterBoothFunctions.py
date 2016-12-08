@@ -1,7 +1,7 @@
 import socket
 import pickle
-from comm_init import *
-from VoterBlockChain import *
+from modules.comm_init import *
+from modules.VoterBlockChain import *
 
 # init_Comms(): this function sets up the socket with the Advisory and Opens a socket for the Ballot Server
 # Also returns the sockets and the instance of the block chain back to the main program
@@ -29,17 +29,21 @@ def init_Comms():
 # as well as the local socket and the socket to the voter advisory. Checks the status of the voter,
 # and updates the advisory. Also waits for the ballot server to connect to it. If the ballot server connects
 # the voter has not voted anywhere else.
-def credentialHandler(credentials, Mysock, AdvSock, BlockChain):
+def credentialHandler(user, Mysock, AdvSock, BlockChain):
+    MAXBUFF = 64000
     IsRegistered = BlockChain.UIRequestBallot(user, AdvSock)
     if IsRegistered:
         Mysock.listen(1) # listen for incoming ballot from Ballot Server
         conn, addr = Mysock.accept()
         ballot = pickle.loads(conn.recv(MAXBUFF))
+    else:
+        ballot=False
+        conn=False
 
     return(ballot, conn)
 
 # castVote(vote, conn) this functions takes the vote from the GUI and sends it to the ballot
 # server through the socket, conn.
 def castVote(vote, conn):
-    conn.send(pickle.dumps(vote))
+    conn.send(pickle.dumps(vote, protocol=2))
     conn.close()

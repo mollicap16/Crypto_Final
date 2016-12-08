@@ -2,7 +2,10 @@
 
 from tkinter import *
 from tkinter import ttk
+from modules.voterBoothFunctions import *
 import sys
+
+AdvSock, Mysock, BlockChain = init_Comms()
 
 #-------------------------------------------#
 #-----------Application Functions-----------#
@@ -10,12 +13,16 @@ import sys
 #quit function: This method is called when vote is pressed  
 def sendVote():
     if(donVar.get()):
+        castVote("Donald Trump", conn)
         print("You Voted Donald Trump")
     elif(hillVar.get()):
+        castVote("Hillary Clinton",conn)
         print("You Voted Crooked Hillary")
     elif(steinVar.get()):
+        castVote("Jill Stein",conn)
         print("You Voted Jill Stein")
     else:
+        castVote(write_in.get(),conn)
         print("You Voted", write_in.get().lower())
 
     #----------------------------------------#
@@ -50,7 +57,10 @@ def sendVote():
 def credCheck():
     #If we have proper credentials to vote. Enable the voter to be able to vote.
     #We will want to put a function before this to check if the credentials are good.
-    if(cred_entry.get() == "Pete"):
+    global conn
+    ballot, conn = credentialHandler(cred_entry.get(), Mysock, AdvSock, BlockChain)
+    print(ballot)
+    if(ballot):
         message_entry.configure(state=NORMAL)
         message_entry.delete(0,END)
         message_entry.insert(0, "Valid Credentials")

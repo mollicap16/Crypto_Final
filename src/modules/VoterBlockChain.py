@@ -23,12 +23,12 @@ class VoterBlockChain:
                 break
             self.VoterChain[0][entry] = 0 # a zero represents that the voter has not yet voted
             entry = raw_input("Enter Voter's Name: ")
-#        print self.VoterChain  # for debugging
+#        print(self.VoterChain)  # for debugging
 
     # Get Most Up to Date Chain from the Trusted Admin
     def RequestUp2DateChain(self, Advisory):
         requestChain = [1] # one means request an up2date ballot
-        Advisory.send(pickle.dumps(requestChain))
+        Advisory.send(pickle.dumps(requestChain,protocol=2))
         self.VoterChain = pickle.loads(Advisory.recv(self.MAXBUFF))
 
     # This function verifies with the blockchain that the voter is registered and has not yet voted.
@@ -38,15 +38,15 @@ class VoterBlockChain:
         self.RequestUp2DateChain(Advisory)
         IsRegistered = self.CheckRegistrationStatus(user)
         if not IsRegistered:
-            print "Sorry %s, but you didn't register!! Try again next election!" %user
+            print("Sorry %s, but you didn't register!! Try again next election!"  %user)
             return (IsRegistered)
         elif (self.VoterChain[-1][user] == 1):
-            print "You voted Already!!! SOUND THE ALARM!!!"
+            print("You voted Already!!! SOUND THE ALARM!!!")
             return False
         else:
-            print "Access Granted. Please wait while we retreive your ballot..."
+            print("Access Granted. Please wait while we retreive your ballot...")
         requestBallot = [2, user]
-        Advisory.send(pickle.dumps(requestBallot))
+        Advisory.send(pickle.dumps(requestBallot,protocol=2))
         return (IsRegistered)      
         
     def CheckRegistrationStatus(self, user):

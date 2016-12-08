@@ -25,7 +25,7 @@ def main():
             temp = BlockChain.VoterChain[-1].copy()
             BlockChain.VoterChain.append(temp)
             BlockChain.VoterChain[-1][data[1]] = 1
-            print BlockChain.VoterChain
+            print(BlockChain.VoterChain)
             BallotRequest = 3
             BallotSock.send(pickle.dumps(BallotRequest))
 if __name__ == "__main__":
