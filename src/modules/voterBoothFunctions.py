@@ -29,7 +29,7 @@ def init_Comms():
 # as well as the local socket and the socket to the voter advisory. Checks the status of the voter,
 # and updates the advisory. Also waits for the ballot server to connect to it. If the ballot server connects
 # the voter has not voted anywhere else.
-def credentialHandler(credentials, Mysock, AdvSock):
+def credentialHandler(credentials, Mysock, AdvSock, BlockChain):
     IsRegistered = BlockChain.UIRequestBallot(user, AdvSock)
     if IsRegistered:
         Mysock.listen(1) # listen for incoming ballot from Ballot Server
