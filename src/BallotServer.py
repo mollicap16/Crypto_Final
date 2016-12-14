@@ -7,8 +7,10 @@ def main():
     MYPORT = 8080
     BoothIP = "127.0.0.1"#"192.168.0.2"
     BoothPort = 8888
+    KeyIP = "127.0.0.1"
+    KeyPort = 5454
     MAXBUFF = 64000
-    
+    Keysock = sender_init(KeyIP, KeyPort)
     Mysock = receiver_init(MYIP, MYPORT)
 
     ballot = ['1. Billy', '2. Annette', '3. Jim']
@@ -21,6 +23,8 @@ def main():
         if data == 3:
             BoothSock = sender_init(BoothIP, BoothPort)
             BoothSock.send(pickle.dumps(ballot))
+            key = Keysock.recv(MAXBUFF)
+            print key
             #vote = pickle.loads(BoothSock.recv(MAXBUFF))
             vote = BoothSock.recv(MAXBUFF)
             BoothSock.close()
