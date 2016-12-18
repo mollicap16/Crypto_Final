@@ -21,7 +21,7 @@ def sendVote():
     elif(hillVar.get()):
         hex_hash, e_vote = encrypt('hillary clinton')
         castVote(e_vote, conn)
-        print("You Voted Crooked Hillary")
+        print("You Voted Hillary Clinton")
         print('Ecrypted message = "%s"\n' % e_vote)
     elif(steinVar.get()):
         hex_hash, e_vote = encrypt('jill stein')
@@ -183,7 +183,7 @@ message_entry.grid(column=1, row=4, sticky = (W,N))
 ttk.Label(mainframe, textvariable=labelVar, font=('bold')).grid(column=2, row=0)
 don_box = ttk.Checkbutton(mainframe, text="Donald Trump", command = donCheck, variable=donVar, state = DISABLED)
 don_box.grid(column=2, row=1, sticky=W)
-hill_box = ttk.Checkbutton(mainframe, text="Crooked Hillary", command = hillCheck, variable=hillVar, state = DISABLED)
+hill_box = ttk.Checkbutton(mainframe, text="Hillary Clinton", command = hillCheck, variable=hillVar, state = DISABLED)
 hill_box.grid(column=2, row=2, sticky=W)
 stein_box = ttk.Checkbutton(mainframe, text="Jill Stein", command = steinCheck, variable=steinVar, state = DISABLED)
 stein_box.grid(column=2, row=3, sticky=W)
