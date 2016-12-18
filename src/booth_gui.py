@@ -3,6 +3,7 @@
 from tkinter import *
 from tkinter import ttk
 from modules.voterBoothFunctions import *
+from modules.AES_mod import *
 import sys
 
 AdvSock, Mysock, BlockChain = init_Comms()
@@ -13,17 +14,25 @@ AdvSock, Mysock, BlockChain = init_Comms()
 #quit function: This method is called when vote is pressed  
 def sendVote():
     if(donVar.get()):
-        castVote("Donald Trump", conn)
+        hex_hash, e_vote = encrypt('donald trump')
+        castVote(e_vote, conn)
         print("You Voted Donald Trump")
+        print('Ecrypted message = "%s"\n' % e_vote)
     elif(hillVar.get()):
-        castVote("Hillary Clinton",conn)
+        hex_hash, e_vote = encrypt('hillary clinton')
+        castVote(e_vote, conn)
         print("You Voted Crooked Hillary")
+        print('Ecrypted message = "%s"\n' % e_vote)
     elif(steinVar.get()):
-        castVote("Jill Stein",conn)
+        hex_hash, e_vote = encrypt('jill stein')
+        castVote(e_vote,conn)
         print("You Voted Jill Stein")
+        print('Ecrypted message = "%s"\n' % e_vote)
     else:
-        castVote(write_in.get(),conn)
-        print("You Voted", write_in.get().lower())
+        hex_hash, e_vote = encrypt(write_in.get().lower())
+        castVote(e_vote,conn)
+        print("You Voted", write_in.get().lower(),"\n")
+        print('Ecrypted message = "%s"\n' % e_vote)
 
     #----------------------------------------#
     #----ADD CODE TO SEND ENCRYPTED VOTED----#
@@ -55,12 +64,23 @@ def sendVote():
 
 #credCheck: This method is used to check the credentials and enable all of the voting boxes
 def credCheck():
-    #If we have proper credentials to vote. Enable the voter to be able to vote.
-    #We will want to put a function before this to check if the credentials are good.
     global conn
-    ballot, conn = credentialHandler(cred_entry.get(), Mysock, AdvSock, BlockChain)
-    print(ballot)
-    if(ballot):
+
+    #Encrypt the credential
+    hex_hash, e_cred = encrypt(cred_entry.get()) 
+    print('Hash = "%s"' % hex_hash)
+    print('Encrypted message = "%s"' % e_cred)
+    
+    #Sent over encrypted credentials and recieved back encrypted validation
+    ballot, conn = credentialHandler(e_cred, Mysock, AdvSock, BlockChain)
+    print('Received the encrypted validation "%s"' % ballot)
+    #Decrypt the validation message
+    d_msg, hex_hash = decrypt(ballot)
+    print('Decrypted validation is "%s"\n' % d_msg)
+    authentic = authenticate(d_msg, hex_hash)
+
+    #If we have proper credentials to vote. Enable the voter to be able to vote.
+    if(d_msg == "Valid" and authentic):
         message_entry.configure(state=NORMAL)
         message_entry.delete(0,END)
         message_entry.insert(0, "Valid Credentials")

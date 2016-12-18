@@ -1,5 +1,7 @@
 from modules.comm_init import *
 from modules.VoterBlockChain import *
+from modules.AES_mod import *
+
 import copy
 
 def main():
